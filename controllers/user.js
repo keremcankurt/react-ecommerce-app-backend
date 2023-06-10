@@ -281,7 +281,7 @@ const beSeller = asyncErrorWrapper(async (req, res, next) => {
   if (user.seller.isSend) {
     return next(new CustomError("You are already send seller request", 400));
   }
-  const sellerUrl = `http://localhost:3000/confirmseller/?id=${id}&company=${informations.company}&name=${informations.name}`; //link değişecek
+  const sellerUrl = `https://kckticaret.netlify.app/confirmseller/?id=${id}&company=${informations.company}&name=${informations.name}`; //link değişecek
   const emailTemplate = `
         <h3>Seller Request</h3>
         <p>Seller Informations <br>${Object.keys(informations).map(function (

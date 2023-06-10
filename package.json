@@ -1,0 +1,36 @@
+{
+  "name": "alisveris-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cookieparser": "^0.1.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-async-error-wrapper": "^1.0.4",
+    "express-async-handler": "^1.2.0",
+    "fuzzy": "^0.1.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.7.7",
+    "path": "^0.12.7",
+    "slugify": "^1.6.5",
+    "string-similarity": "^4.0.4",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}

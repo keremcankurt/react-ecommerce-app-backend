@@ -39,7 +39,7 @@ const register = asyncErrorWrapper(async (req, res, next) => {
   });
   const registerUserToken = user.getTempTokenFromUser();
 
-  const confirmAccountUrl = `http://localhost:3000/confirmaccount/?registerUserToken=${registerUserToken}&id=${user._id}`; //değiştirilecek
+  const confirmAccountUrl = `https://kckticaret.netlify.app/confirmaccount/?registerUserToken=${registerUserToken}&id=${user._id}`; //değiştirilecek
   const emailTemplate = `
         <h3>Confirm Your Account</h3>
         <p>This <a href= '${confirmAccountUrl}' target = '_blank'>link</a>will expire in 1 hour</p>
@@ -135,7 +135,7 @@ const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
   });
   const forgotPasswordToken = user.getTempTokenFromUser();
 
-  const forgotPasswordUrl = `http://localhost:3000/forgotpassword/change/?forgotPasswordToken=${forgotPasswordToken}`; //değiştirilecek
+  const forgotPasswordUrl = `https://kckticaret.netlify.app/forgotpassword/change/?forgotPasswordToken=${forgotPasswordToken}`; //değiştirilecek
   const emailTemplate = `
         <h3>Forgot Password</h3>
         <p>This <a href= '${forgotPasswordUrl}' target = '_blank'>link</a>will expire in 1 hour</p>

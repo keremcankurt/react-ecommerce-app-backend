@@ -33,14 +33,18 @@ const getAllProducts = asyncErrorWrapper(async (req, res, next) => {
       query = query.where('campaign.endDate').gt(new Date());
     }
 
-    if (req.query.minPrice) {
-      const minPrice = parseInt(req.query.minPrice);
-      query = query.where('price').gte(minPrice);
-    }
+    if (req.query.minPrice || req.query.maxPrice) {
+      const priceFilter = {};
 
-    if (req.query.maxPrice) {
-      const maxPrice = parseInt(req.query.maxPrice);
-      query = query.where('price').lte(maxPrice);
+      if (req.query.minPrice) {
+        priceFilter.$gte = parseInt(req.query.minPrice);
+      }
+
+      if (req.query.maxPrice) {
+        priceFilter.$lte = parseInt(req.query.maxPrice);
+      }
+
+      totalQuery.price = priceFilter;
     }
 
     query = productSortHelper(query, req);
@@ -59,14 +63,18 @@ const getAllProducts = asyncErrorWrapper(async (req, res, next) => {
       totalQuery['campaign.endDate'] = { $gt: new Date() };
     }
 
-    if (req.query.minPrice) {
-      const minPrice = parseInt(req.query.minPrice);
-      totalQuery.price = { $gte: minPrice };
-    }
+   if (req.query.minPrice || req.query.maxPrice) {
+      const priceFilter = {};
 
-    if (req.query.maxPrice) {
-      const maxPrice = parseInt(req.query.maxPrice);
-      totalQuery.price = { $lte: maxPrice };
+      if (req.query.minPrice) {
+        priceFilter.$gte = parseInt(req.query.minPrice);
+      }
+
+      if (req.query.maxPrice) {
+        priceFilter.$lte = parseInt(req.query.maxPrice);
+      }
+
+      totalQuery.price = priceFilter;
     }
 
     const total = await Product.countDocuments(totalQuery);

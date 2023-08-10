@@ -13,75 +13,76 @@ const { default: mongoose } = require("mongoose");
 const getAllProducts = asyncErrorWrapper(async (req, res, next) => {
   try {
     let query = Product.find({
+      sellerBlockState: false,
       $or: [
-        { name: { $regex: req.query.search || "", $options: "i" } },
         { category: { $regex: req.query.search || "", $options: "i" } },
         { desc: { $regex: req.query.search || "", $options: "i" } },
-        { "seller.company": { $regex: req.query.search || "", $options: "i" } },
-      ],
+        { "seller.company": { $regex: req.query.search || "", $options: "i" } }
+      ]
     });
+    
+    
+    
 
     if (req.query.categories) {
-      const categories = req.query.categories;
-      query = query.where("category").in(categories);
+      const categories = JSON.parse(req.query.categories);
+      query = query.where('category').in(categories);
     }
 
-    if (req.query.minPrice || req.query.maxPrice) {
-      const priceFilter = {};
+    if (req.query.isCampaign === "true") {
+      query = query.where('campaign.endDate').gt(new Date());
+    }
 
-      if (req.query.minPrice) {
-        priceFilter.$gte = parseInt(req.query.minPrice);
-      }
+    if (req.query.minPrice) {
+      const minPrice = parseInt(req.query.minPrice);
+      query = query.where('price').gte(minPrice);
+    }
 
-      if (req.query.maxPrice) {
-        priceFilter.$lte = parseInt(req.query.maxPrice);
-      }
-
-      query = query.where("price", priceFilter);
+    if (req.query.maxPrice) {
+      const maxPrice = parseInt(req.query.maxPrice);
+      query = query.where('price').lte(maxPrice);
     }
 
     query = productSortHelper(query, req);
 
     const totalQuery = {
+      sellerBlockState: false,
       name: { $regex: req.query.search || "", $options: "i" },
     };
 
     if (req.query.categories) {
-      const categories = req.query.categories;
+      const categories = JSON.parse(req.query.categories);
       totalQuery.category = { $in: categories };
     }
 
-    if (req.query.minPrice || req.query.maxPrice) {
-      const priceFilter = {};
+    if (req.query.isCampaign === "true") {
+      totalQuery['campaign.endDate'] = { $gt: new Date() };
+    }
 
-      if (req.query.minPrice) {
-        priceFilter.$gte = parseInt(req.query.minPrice);
-      }
+    if (req.query.minPrice) {
+      const minPrice = parseInt(req.query.minPrice);
+      totalQuery.price = { $gte: minPrice };
+    }
 
-      if (req.query.maxPrice) {
-        priceFilter.$lte = parseInt(req.query.maxPrice);
-      }
-
-      totalQuery.price = priceFilter;
+    if (req.query.maxPrice) {
+      const maxPrice = parseInt(req.query.maxPrice);
+      totalQuery.price = { $lte: maxPrice };
     }
 
     const total = await Product.countDocuments(totalQuery);
+
     const paginationResult = await paginationHelper(total, query, req);
     query = paginationResult.query;
     const pagination = paginationResult.pagination;
 
     const queryResults = await query;
-    console.log(queryResults, pagination, total)
     res.status(200).json({
-      success: true,
-      data: {
-        count: total,
-        pagination: pagination,
-        products: queryResults,
-      },
+      count: queryResults.length,
+      pagination: pagination,
+      products: queryResults,
     });
   } catch (error) {
-    console.log(error);
+    console.log(error)
     res.status(500).json(error);
   }
 });

@@ -44,7 +44,7 @@ const getAllProducts = asyncErrorWrapper(async (req, res, next) => {
         priceFilter.$lte = parseInt(req.query.maxPrice);
       }
 
-      totalQuery.price = priceFilter;
+      query = query.where("price", priceFilter);
     }
 
     query = productSortHelper(query, req);

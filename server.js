@@ -7,7 +7,6 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser")
 
-//Server global variable
 dotenv.config({
   path: "./config/env/config.env",
 });
